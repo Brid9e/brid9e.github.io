@@ -11,9 +11,18 @@
 
 @font-face {
   font-family: 'Bellamy-Stevenson';
-  src: url('../fonts/Bellamy-Stevenson.ttf') format('truetype');
+  src: url('../fonts/Bellamy-Stevenson.otf') format('truetype');
 }
 
 .f-bs {
-  font-family: 'SJ-Narrow', sans-serif;
+  font-family: 'Bellamy-Stevenson', sans-serif;
+}
+
+@font-face {
+  font-family: 'Sounso-Undividedad';
+  src: url('../fonts/Sounso-Undividedad.ttf') format('truetype');
+}
+
+.f-sounso {
+  font-family: 'Sounso-Undividedad', sans-serif;
 }
