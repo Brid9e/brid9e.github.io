@@ -1,0 +1,19 @@
+// fonts.scss
+
+@font-face {
+  font-family: 'SJ-Narrow';
+  src: url('../fonts/SJ-Narrow.ttf') format('truetype');
+}
+
+.f-sjn {
+  font-family: 'SJ-Narrow', sans-serif;
+}
+
+@font-face {
+  font-family: 'Bellamy-Stevenson';
+  src: url('../fonts/Bellamy-Stevenson.ttf') format('truetype');
+}
+
+.f-bs {
+  font-family: 'SJ-Narrow', sans-serif;
+}

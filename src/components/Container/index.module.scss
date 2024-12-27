@@ -1,5 +1,8 @@
 .content {
-  background: #bfff00;
+  background: var(--color-primary);
   border-radius: 12px 100px 12px;
+  transition: all 0.5s ease;
+  position: relative;
+
   @apply w-full h-[70vh];
 }
