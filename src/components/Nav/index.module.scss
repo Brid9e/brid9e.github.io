@@ -1,6 +1,61 @@
-.nav {
-  height: 100px;
-  padding: 30px;
-  box-sizing: border-box;
-  @apply flex items-center font-bold;
+.nav-flow {
+  @apply z-10;
+}
+
+.left-logo,
+.right-menu {
+  position: absolute;
+  @apply h-10;
+}
+
+.left-logo {
+  @apply top-10 left-20;
+}
+
+.right-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  cursor: pointer;
+  @apply w-10 top-10 right-20;
+
+  .menu-line {
+    width: 100%;
+    filter: blur(0px);
+    transition: all 0.4s ease;
+    transform: rotate(0);
+    opacity: 1;
+    position: absolute;
+    left: 0;
+    @apply bg-white rounded-full h-0.5 border-[2px] border-dashed border-transparent box-border;
+
+    &:nth-child(1) {
+      transform: translateY(13px);
+    }
+    &:nth-child(3) {
+      transform: translateY(-13px);
+    }
+  }
+
+  &:hover {
+    .menu-line:nth-child(2) {
+      @apply w-5 h-5 border-spacing-1 left-2.5 bg-transparent border-[var(--color-primary)] border-[2px] box-border border-dashed;
+    }
+    .menu-line:nth-child(1) {
+      transform: rotate(45deg);
+    }
+    .menu-line:nth-child(3) {
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+.rb-ele {
+  position: absolute;
+  @apply w-5 h-5 bottom-10 right-20 bg-primary rounded-full;
+  transition: all 0.4s ease;
+
+  &:hover {
+    @apply scale-125;
+  }
 }
