@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   @apply w-24 h-24 rounded-full border-[1px] border-dashed border-r-[var(--color-primary)] -ml-8 -mt-8 pointer-events-none;
-  transition: transform 0.4s cubic-bezier(0.230, 1.000, 0.320, 1.000);
+  transition: transform 0.3s cubic-bezier(0.230, 1.000, 0.320, 1.000);
   filter: blur(1px);
   z-index: -1;
 }
