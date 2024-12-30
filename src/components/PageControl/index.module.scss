@@ -2,8 +2,27 @@
   position: absolute;
   top: 0;
   left: 0;
-  @apply w-24 h-24 rounded-full border-[1px] border-dashed border-r-[var(--color-primary)] -ml-8 -mt-8 pointer-events-none;
-  transition: transform 0.3s cubic-bezier(0.230, 1.000, 0.320, 1.000);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   filter: blur(1px);
-  z-index: -1;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  display: none;
+  @apply z-50;
+  @apply lg:flex xl:flex 2xl:flex sm:opacity-100 md:opacity-100 lg:opacity-100 xl:opacity-100 2xl:opacity-100;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    background-color: #ffffff5d;
+    filter: blur(200px);
+    @apply rounded-full;
+  }
+  @apply w-24 h-24 rounded-full border-[1px] border-dashed border-r-[var(--color-primary)] -ml-12 -mt-12 pointer-events-none;
+}
+
+[data-cursor='true'] {
+  @apply w-12 h-12 -ml-6 -mt-6;
 }

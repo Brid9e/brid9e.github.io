@@ -2,11 +2,14 @@
   @apply f-sounso font-thin;
 }
 
+html,
 body {
   background-color: var(--color-main-bg);
+  @apply text-xs sm:text-xs md:text-sm lg:text-sm xl:text-lg 2xl:text-xl;
+}
+body {
   overflow: hidden;
 }
-
 .noise {
   position: fixed;
   inset: 0;

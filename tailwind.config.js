@@ -4,7 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--color-primary)'
+        primary: 'var(--color-primary)',
+        white: 'var(--color-white)',
+        black: 'var(--color-black)'
       }
     }
   },

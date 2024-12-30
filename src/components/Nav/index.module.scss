@@ -3,41 +3,71 @@
 }
 
 .left-logo,
-.right-menu {
+.right-menu,
+.page-num {
   position: absolute;
   @apply h-10;
 }
 
 .left-logo {
-  @apply top-10 left-20;
+  @apply top-10 left-16;
 }
 
+.rb-ele {
+  position: absolute;
+  transition: all 0.4s ease;
+  @apply h-10 bottom-10 right-16 flex items-center;
+
+  &:hover {
+    @apply scale-125;
+  }
+  .rb-ele__dot {
+    @apply w-3 h-3 bg-primary rounded-full;
+    pointer-events: none;
+  }
+}
+
+.page-num {
+  @apply bottom-10 left-16 flex items-center;
+
+  .page-num__item {
+    pointer-events: none;
+  }
+}
+
+.right-menu__content {
+  @apply top-10 right-16 relative bg-primary;
+}
 .right-menu {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   cursor: pointer;
-  @apply w-10 top-10 right-20;
+  @apply w-10 top-0 right-0;
 
   .menu-line {
     width: 100%;
-    filter: blur(0px);
     transition: all 0.4s ease;
     transform: rotate(0);
     opacity: 1;
     position: absolute;
     left: 0;
+    pointer-events: none;
     @apply bg-white rounded-full h-0.5 border-[2px] border-dashed border-transparent box-border;
 
     &:nth-child(1) {
       transform: translateY(13px);
+    }
+    &:nth-child(2) {
+      border-color: var(--color-primary);
+      background-color: transparent;
     }
     &:nth-child(3) {
       transform: translateY(-13px);
     }
   }
 
-  &:hover {
+  &.is-show {
     .menu-line:nth-child(2) {
       @apply w-5 h-5 border-spacing-1 left-2.5 bg-transparent border-[var(--color-primary)] border-[2px] box-border border-dashed;
     }
@@ -50,12 +80,39 @@
   }
 }
 
-.rb-ele {
-  position: absolute;
-  @apply w-5 h-5 bottom-10 right-20 bg-primary rounded-full;
-  transition: all 0.4s ease;
+.menu-box {
+  border-radius: 24px 0 24px 24px;
+  transform: scale(0);
+  transform-origin: top right;
+  transition: all 0.2s ease-out;
+  @apply min-w-full flex flex-col px-10 py-5 absolute opacity-0 z-10 border-primary border-2 bg-black;
+  @apply -right-16 top-16;
+  @apply sm:min-w-80 sm:right-0 sm:top-12;
+  @apply md:min-w-80 md:right-0 md:top-12;
+  @apply lg:min-w-80 lg:right-0 lg:top-12;
+  @apply xl:min-w-80 xl:right-0 xl:top-12;
+  @apply 2xl:min-w-80 2xl:right-0 2xl:top-12;
 
-  &:hover {
-    @apply scale-125;
+  .menu-box__item {
+    @apply text-base py-2 flex items-center ml-2 cursor-pointer relative text-white;
+    width: fit-content;
+    &::before {
+      content: '';
+      transition: all 0.2s ease-out;
+      @apply absolute w-2 h-2 -left-6 border-2 border-primary box-border rounded-full;
+    }
+
+    &:hover {
+      &::before {
+        width: calc(100% + 48px);
+        @apply h-full border-dashed;
+        border-radius: 24px 0 24px 24px;
+      }
+    }
+  }
+
+  &.is-show {
+    @apply opacity-100;
+    transform: scale(1);
   }
 }
