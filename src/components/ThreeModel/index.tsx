@@ -85,7 +85,6 @@ function ThreeModel() {
     document.documentElement
   ).getPropertyValue('--color-primary')
 
-
   return (
     <Canvas>
       <group>
@@ -99,7 +98,11 @@ function ThreeModel() {
         <Text
           position={[0, -0.2, 3.5]}
           font={BellamyStevenson}
-          fontSize={window.innerWidth <= 768 ? 0.15 : 0.3}
+          fontSize={
+            window.innerWidth <= 768
+              ? window.innerWidth * 0.00032
+              : (window.innerWidth > 1280 ? 1280 : window.innerWidth) * 0.00022
+          }
           fontWeight={600}
           color="#ffffff">
           {'Love life, love yourself.'}

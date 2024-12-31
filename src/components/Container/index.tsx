@@ -18,9 +18,6 @@ function Container() {
 
   return (
     <main ref={container} className={styles.content}>
-      {/* {[1, 2, 3, 4, 5, 6, 7].map((key) => (
-
-      ))} */}
       <div className={`${styles['page-item']} item-gsap`}>
         <ThreeModel />
       </div>
