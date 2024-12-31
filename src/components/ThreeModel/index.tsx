@@ -2,6 +2,7 @@ import React from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei'
 import { TextureLoader } from 'three'
+import BellamyStevenson from '@/assets/fonts/Bellamy-Stevenson.otf'
 
 import styles from './index.module.scss'
 
@@ -10,7 +11,7 @@ function RotatingCube({ primaryColor }: { primaryColor: string }) {
 
   const matcapTexture = useLoader(
     TextureLoader,
-    'public/images/matcap-porcelain-white.jpg'
+    '/images/matcap-porcelain-white.jpg'
   )
 
   useFrame(() => {
@@ -48,7 +49,7 @@ function ThreeModel() {
         window.innerWidth <= 768 ? (
           <Text
             position={[0, 0, 2]}
-            font="src/assets/fonts/Bellamy-Stevenson.otf"
+            font={BellamyStevenson}
             fontSize={0.3}
             fontWeight={600}
             color="#ffffff">
@@ -58,7 +59,7 @@ function ThreeModel() {
         ) : (
           <Text
             position={[0, 0, 2]}
-            font="src/assets/fonts/Bellamy-Stevenson.otf"
+            font={BellamyStevenson}
             fontSize={0.4}
             fontWeight={600}
             color="#ffffff">
