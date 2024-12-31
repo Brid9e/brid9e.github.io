@@ -5,7 +5,7 @@
 html,
 body {
   background-color: var(--color-main-bg);
-  @apply text-xs sm:text-xs md:text-sm lg:text-sm xl:text-lg 2xl:text-xl;
+  @apply text-xs sm:text-xs md:text-xs lg:text-sm xl:text-sm 2xl:text-sm;
 }
 body {
   overflow: hidden;

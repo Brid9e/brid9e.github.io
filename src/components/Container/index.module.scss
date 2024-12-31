@@ -1,8 +1,8 @@
 .content {
-  @apply w-full h-full absolute top-0 left-0 -z-10 border-red-700 flex-col overflow-y-auto;
   &::-webkit-scrollbar {
     display: none;
   }
+  @apply w-full h-full absolute top-0 left-0 -z-10 border-red-700 flex-col overflow-y-auto;
 }
 
 .page-item {

@@ -10,20 +10,20 @@ function Container() {
 
   const scroll = useScroll(container)
 
-  useGSAP(
-    (context, contextSafe) => {
-
-    },
-    { scope: container, dependencies: [scroll?.top], revertOnUpdate: true }
-  )
+  useGSAP((context, contextSafe) => {}, {
+    scope: container,
+    dependencies: [scroll?.top],
+    revertOnUpdate: true
+  })
 
   return (
     <main ref={container} className={styles.content}>
-      {[1, 2, 3, 4, 5, 6, 7].map((key) => (
-        <div key={key} className={`${styles['page-item']} item-gsap`}>
-          <ThreeModel />
-        </div>
-      ))}
+      {/* {[1, 2, 3, 4, 5, 6, 7].map((key) => (
+
+      ))} */}
+      <div className={`${styles['page-item']} item-gsap`}>
+        <ThreeModel />
+      </div>
     </main>
   )
 }

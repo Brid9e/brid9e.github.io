@@ -46,6 +46,11 @@ function Menu() {
     setShow(!show)
   }
 
+  function onClickMenu(item: any) {
+    window.history.pushState({}, '', item.path)
+    onShowMenu()
+  }
+
   return (
     <div className={styles['right-menu__content']}>
       <a
@@ -59,6 +64,7 @@ function Menu() {
       <div className={`${styles['menu-box']} ${show && styles['is-show']}`}>
         {menuList.map((item) => (
           <a
+            onClick={() => onClickMenu(item)}
             className={styles['menu-box__item']}
             key={item.label}
             data-e="true">
