@@ -1,9 +1,35 @@
 import { useEffect, useRef } from 'react'
+import { useMouse } from 'ahooks'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei'
 import { createNoise4D } from 'simplex-noise'
+import { Vector3 } from 'three'
+import type { DirectionalLight } from 'three'
 import BellamyStevenson from '@/assets/fonts/Bellamy-Stevenson.otf'
 import styles from './index.module.scss'
+
+const LightSource = ({ primaryColor }: { primaryColor: string }) => {
+  const lightRef = useRef<DirectionalLight>(null)
+  const { clientX, clientY } = useMouse()
+
+  // 根据鼠标位置更新光源的位置
+  useFrame(() => {
+    if (lightRef.current && window.innerWidth >= 1024) {
+      lightRef.current.position.x = (clientX / window.innerWidth) * 2 - 1 || 0
+      lightRef.current.position.y = -(clientY / window.innerHeight) * 2 + 1 || 0
+      lightRef.current.position.z = 1 // 固定 z 位置
+    }
+  })
+
+  return (
+    <directionalLight
+      ref={lightRef}
+      intensity={1}
+      color={primaryColor}
+      position={[0, 0, 1]} // 初始位置
+    />
+  )
+}
 
 function RotatingCube({ primaryColor }: { primaryColor: string }) {
   const noise4D = createNoise4D()
@@ -87,28 +113,21 @@ function ThreeModel() {
 
   return (
     <Canvas>
-      <group>
-        {/* 光源 */}
-        <directionalLight
-          intensity={1}
-          color={primaryColor}
-          position={[0, 0, 1]}
-        />
-        <RotatingCube primaryColor={primaryColor} />
-        <Text
-          position={[0, -0.2, 3.5]}
-          font={BellamyStevenson}
-          fontSize={
-            window.innerWidth <= 768
-              ? window.innerWidth * 0.00032
-              : (window.innerWidth > 1280 ? 1280 : window.innerWidth) * 0.00022
-          }
-          fontWeight={600}
-          color="#ffffff">
-          {'Love life, love yourself.'}
-          <meshMatcapMaterial color="#ffffff" />
-        </Text>
-      </group>
+      <LightSource primaryColor={primaryColor} />
+      <RotatingCube primaryColor={primaryColor} />
+      <Text
+        position={[0, -0.2, 3.5]}
+        font={BellamyStevenson}
+        fontSize={
+          window.innerWidth <= 768
+            ? window.innerWidth * 0.00032
+            : (window.innerWidth > 1280 ? 1280 : window.innerWidth) * 0.00022
+        }
+        fontWeight={600}
+        color="#ffffff">
+        {'Love life, love yourself.'}
+        <meshMatcapMaterial color="#ffffff" />
+      </Text>
     </Canvas>
   )
 }
