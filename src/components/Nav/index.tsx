@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 
 function Nav() {
@@ -15,18 +16,25 @@ function Nav() {
 }
 
 function Logo() {
+  const navigate = useNavigate()
+
   return (
-    <a className={styles['left-logo']} data-e="true">
+    <div
+      className={styles['left-logo']}
+      data-e="true"
+      onClick={() => navigate('/')}>
       <span className="text-4xl font-black text-white pointer-events-none f-bs">
         Brid
         <span className="text-primary f-bs">9</span>e
       </span>
-    </a>
+    </div>
   )
 }
 
 function Menu() {
   const [show, setShow] = useState(false)
+  const navigate = useNavigate()
+
   const menuList = [
     {
       label: 'Me',
@@ -34,11 +42,11 @@ function Menu() {
     },
     {
       label: 'Projects',
-      path: '/prj'
+      path: '/projects'
     },
     {
       label: 'Talks',
-      path: '/prj'
+      path: '/talks'
     }
   ]
 
@@ -47,32 +55,47 @@ function Menu() {
   }
 
   function onClickMenu(item: any) {
-    window.history.pushState({}, '', item.path)
+    navigate(item.path)
     onShowMenu()
   }
 
   return (
-    <div className={styles['right-menu__content']}>
-      <a
-        className={`${styles['right-menu']} ${show && styles['is-show']}`}
-        data-e="true"
-        onClick={onShowMenu}>
-        {[1, 2, 3].map((key) => (
-          <i key={key} className={styles['menu-line']}></i>
-        ))}
-      </a>
-      <div className={`${styles['menu-box']} ${show && styles['is-show']}`}>
-        {menuList.map((item) => (
+    <>
+      <div className={styles['right-menu__content']}>
+        <div className={styles['menu-normal']}>
+          {menuList.map((item) => (
+            <a
+              onClick={() => onClickMenu(item)}
+              className={styles['menu-box__item']}
+              key={item.label}
+              data-e="true">
+              {item.label}
+            </a>
+          ))}
+        </div>
+        <div className={styles['menu-mobile']}>
           <a
-            onClick={() => onClickMenu(item)}
-            className={styles['menu-box__item']}
-            key={item.label}
-            data-e="true">
-            {item.label}
+            className={`${styles['right-menu']} ${show && styles['is-show']}`}
+            data-e="true"
+            onClick={onShowMenu}>
+            {[1, 2, 3].map((key) => (
+              <i key={key} className={styles['menu-line']}></i>
+            ))}
           </a>
-        ))}
+          <div className={`${styles['menu-box']} ${show && styles['is-show']}`}>
+            {menuList.map((item) => (
+              <a
+                onClick={() => onClickMenu(item)}
+                className={styles['menu-box__item']}
+                key={item.label}
+                data-e="true">
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -3,12 +3,13 @@ import { useMouse } from 'ahooks'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei'
 import { createNoise4D } from 'simplex-noise'
-import { Vector3 } from 'three'
+import { Vector3, Color } from 'three'
 import type { DirectionalLight } from 'three'
 import BellamyStevenson from '@/assets/fonts/Bellamy-Stevenson.otf'
+import gsap from 'gsap'
 import styles from './index.module.scss'
 
-const LightSource = ({ primaryColor }: { primaryColor: string }) => {
+const LightSource = ({ primaryColor }: { primaryColor?: string }) => {
   const lightRef = useRef<DirectionalLight>(null)
   const { clientX, clientY } = useMouse()
 
@@ -17,9 +18,21 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
     if (lightRef.current && window.innerWidth >= 1024) {
       lightRef.current.position.x = (clientX / window.innerWidth) * 2 - 1 || 0
       lightRef.current.position.y = -(clientY / window.innerHeight) * 2 + 1 || 0
-      lightRef.current.position.z = 1 // 固定 z 位置
+      lightRef.current.position.z = 0.8 // 固定 z 位置
     }
   })
+
+  useEffect(() => {
+    if (lightRef.current) {
+      gsap.to(lightRef.current.color, {
+        r: new Color(primaryColor).r,
+        g: new Color(primaryColor).g,
+        b: new Color(primaryColor).b,
+        duration: 3, // 动画持续时间
+        ease: 'power2.out' // 缓动函数
+      })
+    }
+  }, [primaryColor])
 
   return (
     <directionalLight
@@ -31,7 +44,7 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
   )
 }
 
-function RotatingCube({ primaryColor }: { primaryColor: string }) {
+function RotatingCube({ primaryColor }: { primaryColor?: string }) {
   const noise4D = createNoise4D()
   const meshRef = useRef<any>()
 
@@ -73,8 +86,8 @@ function RotatingCube({ primaryColor }: { primaryColor: string }) {
         const nz = normals[i + 2]
 
         // 增加空间频率和时间影响，以及输出高度的放大倍数
-        const frequency = 3 // 调整此值改变细节度
-        const amplitude = 0.1 // 放大输出高度
+        const frequency = 4 // 调整此值改变细节度
+        const amplitude = 0.16 // 放大输出高度
         const speed = 1 // 时间变化速度
 
         // 利用时间作为第四个维度，创造动画效果
@@ -106,10 +119,12 @@ function RotatingCube({ primaryColor }: { primaryColor: string }) {
   )
 }
 
-function ThreeModel() {
-  const primaryColor = getComputedStyle(
-    document.documentElement
-  ).getPropertyValue('--color-primary')
+function ThreeModel({ color }: { color?: string }) {
+  const primaryColor =
+    color ||
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--color-primary'
+    )
 
   return (
     <Canvas>

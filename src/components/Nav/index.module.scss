@@ -4,13 +4,14 @@
 
 .left-logo,
 .right-menu,
-.page-num {
+.page-num,
+.menu-normal {
   position: absolute;
   @apply h-10;
 }
 
 .left-logo {
-  @apply top-10 left-16;
+  @apply top-10 left-16 select-none cursor-pointer;
 }
 
 .rb-ele {
@@ -36,8 +37,9 @@
 }
 
 .right-menu__content {
-  @apply top-10 right-16 relative bg-primary;
+  @apply top-10 right-16 absolute bg-primary;
 }
+
 .right-menu {
   display: flex;
   flex-direction: column;
@@ -85,21 +87,31 @@
   transform: scale(0);
   transform-origin: top right;
   transition: all 0.2s ease-out;
-  @apply min-w-full flex flex-col px-10 py-5 absolute opacity-0 z-10 border-primary border-2 bg-black;
+  width: 100vw;
+  @apply flex flex-col px-10 py-5 absolute opacity-0 z-10 border-transparent border-2 h-[100vh] backdrop-blur-2xl;
   @apply -right-16 top-16;
-  @apply sm:min-w-80 sm:right-0 sm:top-12;
-  @apply md:min-w-80 md:right-0 md:top-12;
-  @apply lg:min-w-80 lg:right-0 lg:top-12;
-  @apply xl:min-w-80 xl:right-0 xl:top-12;
-  @apply 2xl:min-w-80 2xl:right-0 2xl:top-12;
+  @apply sm:min-w-80 sm:right-0 sm:top-12 sm:border-primary sm:h-auto;
+  @apply md:min-w-80 md:right-0 md:top-12 md:border-primary md:h-auto;
+  @apply lg:min-w-80 lg:right-0 lg:top-12 lg:border-primary lg:h-auto;
+  @apply xl:min-w-80 xl:right-0 xl:top-12 xl:border-primary xl:h-auto;
+  @apply 2xl:min-w-80 2xl:right-0 2xl:top-12 2xl:border-primary 2xl:h-auto;
 
   .menu-box__item {
-    @apply text-base py-2 flex items-center ml-2 cursor-pointer relative text-white;
-    width: fit-content;
+    @apply text-base py-6 flex items-center cursor-pointer relative text-white justify-center hover:bg-primary-800 rounded-2xl;
+    @apply sm:justify-start sm:py-2 sm:hover:bg-transparent;
+    @apply md:justify-start md:py-2 md:hover:bg-transparent;
+    @apply lg:justify-start lg:py-2 lg:hover:bg-transparent;
+    @apply xl:justify-start xl:py-2 xl:hover:bg-transparent;
+    @apply 2xl:justify-start 2xl:py-2 2xl:hover:bg-transparent;
     &::before {
       content: '';
       transition: all 0.2s ease-out;
-      @apply absolute w-2 h-2 -left-6 border-2 border-primary box-border rounded-full;
+      @apply absolute w-2 h-2 -left-6 border-2 border-primary box-border rounded-full opacity-0;
+      @apply sm:opacity-100;
+      @apply md:opacity-100;
+      @apply lg:opacity-100;
+      @apply xl:opacity-100;
+      @apply 2xl:opacity-100;
     }
 
     &:hover {
@@ -114,5 +126,27 @@
   &.is-show {
     @apply opacity-100;
     transform: scale(1);
+  }
+}
+
+.menu-mobile {
+  @apply sm:hidden;
+  @apply md:hidden;
+  @apply lg:hidden;
+  @apply xl:hidden;
+  @apply 2xl:hidden;
+}
+
+.menu-normal {
+  @apply hidden items-center text-white absolute top-0 right-0;
+  @apply sm:flex md:flex lg:flex xl:flex 2xl:flex;
+
+  .menu-box__item {
+    transition: all 0.2s ease;
+    @apply mr-1 cursor-pointer last:mr-0 px-4 py-2 border-2 border-transparent border-dashed rounded-md;
+
+    &:hover {
+      @apply text-primary border-2 border-primary border-dashed;
+    }
   }
 }

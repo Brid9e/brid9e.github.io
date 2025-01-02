@@ -5,7 +5,7 @@ import { useScroll } from 'ahooks'
 import styles from './index.module.scss'
 import { useRef } from 'react'
 
-function Container() {
+function Container({ color }: { color?: string }) {
   const container = useRef(null)
 
   const scroll = useScroll(container)
@@ -19,7 +19,7 @@ function Container() {
   return (
     <main ref={container} className={styles.content}>
       <div className={`${styles['page-item']} item-gsap`}>
-        <ThreeModel />
+        <ThreeModel color={color} />
       </div>
     </main>
   )
