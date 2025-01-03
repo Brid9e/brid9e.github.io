@@ -13,6 +13,7 @@ import styles from './index.module.scss'
 const LightSource = ({ primaryColor }: { primaryColor: string }) => {
   const location = useLocation()
   const [color, setColor] = useState<string>(primaryColor)
+  const [isInitial, setIsInitial] = useState(true)
 
   useEffect(() => {
     switch (location.pathname) {
@@ -31,7 +32,7 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
       default:
         break
     }
-  }, [location])
+  }, [location.pathname])
 
   const lightRef = useRef<DirectionalLight>(null)
   const subLightRef = useRef<DirectionalLight>(null)
@@ -61,17 +62,11 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
     }
   }
 
-  useEffect(() => {
-    if (lightRef.current) {
-      gsapToColor(color)
-    }
-  }, [color])
-
   return (
     <>
       <directionalLight
         ref={subLightRef}
-        intensity={window.innerWidth <= 768 ? 0.4 : 0.25}
+        intensity={window.innerWidth < 1024 ? 0.4 : 0.25}
         color={color}
         position={[0, 0, 1]} // 初始位置
       />
@@ -79,7 +74,7 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
         ref={lightRef}
         intensity={2}
         color={color}
-        position={window.innerWidth > 768 ? [0, 0, -1] : [1, 1, -1]}
+        position={window.innerWidth >= 1024 ? [0, 0, -1] : [1, 1, -1]}
       />
     </>
   )
