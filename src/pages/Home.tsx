@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, HashRouter, Routes, Route } from 'react-router'
 
 import Nav from '@/components/Nav'
 import Container from '@/components/Container'
@@ -16,7 +16,7 @@ const ContainerMemo = memo(function ContainerMemo({
 function Home() {
   return (
     <div>
-      <BrowserRouter>
+      <HashRouter>
         <Nav />
         <Routes>
           <Route path="/" element={<ContainerMemo />} />
@@ -24,7 +24,7 @@ function Home() {
           <Route path="/projects" element={<ContainerMemo />} />
           <Route path="/talks" element={<ContainerMemo />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
       <div className="noise"></div>
       <Mouse />
     </div>
