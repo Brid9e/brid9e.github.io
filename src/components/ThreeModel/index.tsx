@@ -47,12 +47,13 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
 
   useEffect(() => {
     if (lightRef.current) {
-      gsap.to(lightRef.current.color, {
-        r: new Color(color).r,
-        g: new Color(color).g,
-        b: new Color(color).b,
-        duration: 2, // 动画持续时间
-        ease: 'power2.out' // 缓动函数
+      const currentColor = lightRef.current.color
+      const targetColor = new Color(color)
+      gsap.to(currentColor, {
+        r: targetColor.r,
+        g: targetColor.g,
+        b: targetColor.b,
+        duration: 2 // 动画持续时间
       })
     }
   }, [color])
