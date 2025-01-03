@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMouse } from 'ahooks'
+import { useLocation } from 'react-router-dom'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, Text } from '@react-three/drei'
 import { createNoise4D } from 'simplex-noise'
@@ -9,7 +10,29 @@ import BellamyStevenson from '@/assets/fonts/Bellamy-Stevenson.otf'
 import gsap from 'gsap'
 import styles from './index.module.scss'
 
-const LightSource = ({ primaryColor }: { primaryColor?: string }) => {
+const LightSource = ({ primaryColor }: { primaryColor: string }) => {
+  const location = useLocation()
+  const [color, setColor] = useState<string>(primaryColor)
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/me':
+        setColor('#33d9b2')
+        break
+      case '/projects':
+        setColor('#8c7ae6')
+        break
+      case '/talks':
+        setColor('#ffb142')
+        break
+      case '/':
+        setColor(primaryColor)
+        break
+      default:
+        break
+    }
+  }, [location])
+
   const lightRef = useRef<DirectionalLight>(null)
   const { clientX, clientY } = useMouse()
 
@@ -25,20 +48,20 @@ const LightSource = ({ primaryColor }: { primaryColor?: string }) => {
   useEffect(() => {
     if (lightRef.current) {
       gsap.to(lightRef.current.color, {
-        r: new Color(primaryColor).r,
-        g: new Color(primaryColor).g,
-        b: new Color(primaryColor).b,
-        duration: 3, // 动画持续时间
+        r: new Color(color).r,
+        g: new Color(color).g,
+        b: new Color(color).b,
+        duration: 2, // 动画持续时间
         ease: 'power2.out' // 缓动函数
       })
     }
-  }, [primaryColor])
+  }, [color])
 
   return (
     <directionalLight
       ref={lightRef}
       intensity={1}
-      color={primaryColor}
+      color={color}
       position={[0, 0, 1]} // 初始位置
     />
   )
@@ -119,12 +142,10 @@ function RotatingCube({ primaryColor }: { primaryColor?: string }) {
   )
 }
 
-function ThreeModel({ color }: { color?: string }) {
-  const primaryColor =
-    color ||
-    getComputedStyle(document.documentElement).getPropertyValue(
-      '--color-primary'
-    )
+function ThreeModel() {
+  const primaryColor = getComputedStyle(
+    document.documentElement
+  ).getPropertyValue('--color-primary')
 
   return (
     <Canvas>

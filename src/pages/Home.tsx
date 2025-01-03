@@ -10,7 +10,7 @@ const ContainerMemo = memo(function ContainerMemo({
 }: {
   color?: string
 }) {
-  return <Container color={color} />
+  return <Container />
 })
 
 function Home() {
@@ -20,9 +20,9 @@ function Home() {
         <Nav />
         <Routes>
           <Route path="/" element={<ContainerMemo />} />
-          <Route path="/me" element={<ContainerMemo color="blue" />} />
-          <Route path="/projects" element={<ContainerMemo color="yellow" />} />
-          <Route path="/talks" element={<ContainerMemo color="red" />} />
+          <Route path="/me" element={<ContainerMemo />} />
+          <Route path="/projects" element={<ContainerMemo />} />
+          <Route path="/talks" element={<ContainerMemo />} />
         </Routes>
       </BrowserRouter>
       <div className="noise"></div>
