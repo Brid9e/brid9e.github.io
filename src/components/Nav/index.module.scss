@@ -82,6 +82,11 @@
   }
 }
 
+.menu-mobile-active {
+  color: var(--color-black) !important;
+  @apply bg-primary;
+}
+
 .menu-box {
   border-radius: 24px 0 24px 24px;
   transform: scale(0);
@@ -97,7 +102,7 @@
   @apply 2xl:min-w-80 2xl:right-0 2xl:top-12 2xl:border-primary 2xl:h-auto;
 
   .menu-box__item {
-    @apply text-base py-6 flex items-center cursor-pointer relative text-white justify-center hover:bg-primary-800 rounded-2xl;
+    @apply text-base py-6 flex items-center cursor-pointer relative text-white justify-center rounded-2xl my-1 hover:bg-primary hover:text-black;
     @apply sm:justify-start sm:py-2 sm:hover:bg-transparent;
     @apply md:justify-start md:py-2 md:hover:bg-transparent;
     @apply lg:justify-start lg:py-2 lg:hover:bg-transparent;
@@ -112,14 +117,6 @@
       @apply lg:opacity-100;
       @apply xl:opacity-100;
       @apply 2xl:opacity-100;
-    }
-
-    &:hover {
-      &::before {
-        width: calc(100% + 48px);
-        @apply h-full border-dashed;
-        border-radius: 24px 0 24px 24px;
-      }
     }
   }
 
@@ -146,7 +143,11 @@
     @apply mr-1 cursor-pointer last:mr-0 px-4 py-2 border-2 border-transparent border-dashed rounded-md;
 
     &:hover {
-      @apply text-primary border-2 border-primary border-dashed;
+      @apply menu-normal-active;
     }
   }
+}
+
+.menu-normal-active {
+  @apply text-primary border-2 border-primary border-dashed;
 }

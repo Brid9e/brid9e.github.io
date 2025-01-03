@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './index.module.scss'
 
 function Nav() {
@@ -34,6 +34,7 @@ function Logo() {
 function Menu() {
   const [show, setShow] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const menuList = [
     {
@@ -56,7 +57,7 @@ function Menu() {
 
   function onClickMenu(item: any) {
     navigate(item.path)
-    onShowMenu()
+    // onShowMenu()
   }
 
   return (
@@ -66,7 +67,9 @@ function Menu() {
           {menuList.map((item) => (
             <a
               onClick={() => onClickMenu(item)}
-              className={styles['menu-box__item']}
+              className={`${styles['menu-box__item']} ${
+                location.pathname === item?.path && styles['menu-normal-active']
+              }`}
               key={item.label}
               data-e="true">
               {item.label}
@@ -86,7 +89,10 @@ function Menu() {
             {menuList.map((item) => (
               <a
                 onClick={() => onClickMenu(item)}
-                className={styles['menu-box__item']}
+                className={`${styles['menu-box__item']} ${
+                  location.pathname === item?.path &&
+                  styles['menu-mobile-active']
+                }`}
                 key={item.label}
                 data-e="true">
                 {item.label}

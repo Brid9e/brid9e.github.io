@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMouse } from 'ahooks'
 import { useLocation } from 'react-router-dom'
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import { OrbitControls, Text } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Text } from '@react-three/drei'
 import { createNoise4D } from 'simplex-noise'
-import { Vector3, Color } from 'three'
+import { Color } from 'three'
 import type { DirectionalLight } from 'three'
 import BellamyStevenson from '@/assets/fonts/Bellamy-Stevenson.otf'
 import gsap from 'gsap'
@@ -17,16 +17,16 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
   useEffect(() => {
     switch (location.pathname) {
       case '/me':
-        setColor('#33d9b2')
+        gsapToColor('#33d9b2')
         break
       case '/projects':
-        setColor('#8c7ae6')
+        gsapToColor('#d5a7ff')
         break
       case '/talks':
-        setColor('#ffb142')
+        gsapToColor('#ffe700')
         break
       case '/':
-        setColor(primaryColor)
+        gsapToColor(primaryColor)
         break
       default:
         break
@@ -34,6 +34,7 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
   }, [location])
 
   const lightRef = useRef<DirectionalLight>(null)
+  const subLightRef = useRef<DirectionalLight>(null)
   const { clientX, clientY } = useMouse()
 
   // 根据鼠标位置更新光源的位置
@@ -41,30 +42,46 @@ const LightSource = ({ primaryColor }: { primaryColor: string }) => {
     if (lightRef.current && window.innerWidth >= 1024) {
       lightRef.current.position.x = (clientX / window.innerWidth) * 2 - 1 || 0
       lightRef.current.position.y = -(clientY / window.innerHeight) * 2 + 1 || 0
-      lightRef.current.position.z = 0.8 // 固定 z 位置
+      lightRef.current.position.z = -0.3 // 固定 z 位置
     }
   })
 
-  useEffect(() => {
-    if (lightRef.current) {
+  function gsapToColor(newColor: string) {
+    if (lightRef.current && subLightRef.current) {
       const currentColor = lightRef.current.color
-      const targetColor = new Color(color)
-      gsap.to(currentColor, {
+      const subLightColor = subLightRef.current.color
+      const targetColor = new Color(newColor)
+      gsap.to([currentColor, subLightColor], {
         r: targetColor.r,
         g: targetColor.g,
         b: targetColor.b,
-        duration: 2 // 动画持续时间
+        duration: 1,
+        ease: 'power2.inOut'
       })
+    }
+  }
+
+  useEffect(() => {
+    if (lightRef.current) {
+      gsapToColor(color)
     }
   }, [color])
 
   return (
-    <directionalLight
-      ref={lightRef}
-      intensity={1}
-      color={color}
-      position={[0, 0, 1]} // 初始位置
-    />
+    <>
+      <directionalLight
+        ref={subLightRef}
+        intensity={window.innerWidth <= 768 ? 0.4 : 0.25}
+        color={color}
+        position={[0, 0, 1]} // 初始位置
+      />
+      <directionalLight
+        ref={lightRef}
+        intensity={2}
+        color={color}
+        position={window.innerWidth > 768 ? [0, 0, -1] : [1, 1, -1]}
+      />
+    </>
   )
 }
 
@@ -110,7 +127,7 @@ function RotatingCube({ primaryColor }: { primaryColor?: string }) {
         const nz = normals[i + 2]
 
         // 增加空间频率和时间影响，以及输出高度的放大倍数
-        const frequency = 4 // 调整此值改变细节度
+        const frequency = 3 // 调整此值改变细节度
         const amplitude = 0.16 // 放大输出高度
         const speed = 1 // 时间变化速度
 
@@ -134,10 +151,10 @@ function RotatingCube({ primaryColor }: { primaryColor?: string }) {
 
   return (
     <>
-      <mesh ref={meshRef} position={[0, 0, 2]}>
+      <mesh ref={meshRef} position={[0, 0, 2.3]}>
         {/* <icosahedronGeometry args={[1, 0]} /> */}
         <sphereGeometry args={[2, 128, 128]} />
-        <meshPhongMaterial opacity={1} wireframe={false} />
+        <meshPhysicalMaterial opacity={1} transparent={true} />
       </mesh>
     </>
   )
