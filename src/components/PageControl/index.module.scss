@@ -14,13 +14,13 @@
   &::before {
     content: '';
     position: absolute;
-    width: 500%;
-    height: 500%;
-    background-color: #ffffff7d;
-    filter: blur(200px);
+    width: 200%;
+    height: 200%;
+    background-color: #ffffff30;
+    filter: blur(100px);
     @apply rounded-full;
   }
-  @apply w-12 h-12 rounded-full border-[1px] border-dashed border-r-[var(--color-primary)] -ml-6 -mt-6 pointer-events-none;
+  @apply w-12 h-12 rounded-full border-[1px] border-dashed -ml-6 -mt-6 pointer-events-none;
 }
 
 [data-cursor='true'] {
