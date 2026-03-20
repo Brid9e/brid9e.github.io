@@ -1,0 +1,328 @@
+import { Icon } from '@iconify/react'
+import { useEffect, useState } from 'react'
+
+import nikonSvg from '@/assets/imgs/nikon.svg'
+import qiankunImg from '@/assets/imgs/qiankun.png'
+
+const STORAGE_KEY = 'theme'
+
+type SkillTag = {
+  label: string
+  icon?: string
+  imageSrc?: string
+  /** 本地图标的尺寸类，默认 w-4 h-4 */
+  imageClassName?: string
+  /** 定色为黑的图标，暗色下反色以适配背景 */
+  invertInDark?: boolean
+  href?: string
+  /** 横向 Iconify 图标可加宽 */
+  iconClassName?: string
+}
+
+const REAL_NAME = '王栋桥'
+const HANDLE = '@Brid9e'
+const GITHUB_PROFILE_URL = 'https://github.com/Brid9e'
+const NPM_PROFILE_URL = 'https://www.npmjs.com/~joebrid9ewong'
+const NPM_HANDLE = '@joebrid9ewong'
+const BILIBILI_URL = 'https://space.bilibili.com/8086424'
+const BILIBILI_HANDLE = '@布瑞之'
+
+/** 入职年份（用于工龄展示，按自然年差计算） */
+const CAREER_JOIN_YEAR = 2021
+
+function workYearsSinceJoin(joinYear: number): number {
+  const y = new Date().getFullYear() - joinYear
+  return Math.max(0, y)
+}
+
+/* 出生日期与年龄（备用，恢复时取消注释并写回介绍文案）
+const BIRTH_DATE = '1997-10-28'
+
+function ageFromIsoDate(iso: string): number {
+  const [y, m, d] = iso.split('-').map(Number)
+  const birth = new Date(y, m - 1, d)
+  const today = new Date()
+  let age = today.getFullYear() - birth.getFullYear()
+  if (
+    today.getMonth() < birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())
+  ) {
+    age -= 1
+  }
+  return age
+}
+*/
+
+/** 主要技能（icon 与 https://icones.js.org 一致） */
+const SKILL_TAGS_PRIMARY: SkillTag[] = [
+  { label: 'Vue', icon: 'devicon:vuejs' },
+  { label: 'Vite', icon: 'devicon:vitejs' },
+  { label: 'TypeScript', icon: 'devicon:typescript' },
+  { label: 'JavaScript', icon: 'devicon:javascript' }
+]
+
+/** 常用库（可视化、UI、微前端等） */
+const SKILL_TAGS_LIBRARIES: SkillTag[] = [
+  { label: 'ECharts', icon: 'simple-icons:apacheecharts' },
+  { label: 'Three.js', icon: 'devicon:threejs', invertInDark: true },
+  { label: 'AntV', icon: 'simple-icons:antv' },
+  { label: 'Element Plus', icon: 'ep:element-plus' },
+  { label: '高德地图', icon: 'mdi:map' },
+  { label: 'qiankun', imageSrc: qiankunImg }
+]
+
+/** 常用编辑器 / AI 编程工具 */
+const SKILL_TAGS_TOOLS: SkillTag[] = [
+  { label: 'VS Code', icon: 'devicon:vscode' },
+  { label: 'Cursor', icon: 'vscode-icons:file-type-cursorrules' },
+  { label: 'Claude Code', icon: 'logos:claude-icon' },
+  { label: 'Codex', icon: 'simple-icons:openai' }
+]
+
+/** 次要技能 */
+const SKILL_TAGS_SECONDARY: SkillTag[] = [
+  { label: 'Python', icon: 'devicon:python' },
+  { label: 'Linux', icon: 'devicon:linux' },
+  { label: 'Nginx', icon: 'logos:nginx' },
+  { label: 'Docker', icon: 'logos:docker-icon' }
+]
+
+/** 与工作无关的小兴趣 */
+const SKILL_TAGS_MISC: SkillTag[] = [
+  {
+    label: '摄影',
+    imageSrc: nikonSvg,
+    href: 'https://joe-photography.lofter.com/'
+  },
+  { label: '唱歌', icon: 'solar:music-note-bold' },
+  { label: '旅游', icon: 'emojione-monotone:mountain' },
+  { label: '健身（任重道远）', icon: 'icon-park-outline:fitness' }
+]
+
+type Theme = 'light' | 'dark'
+
+function readStoredTheme(): Theme {
+  try {
+    const v = localStorage.getItem(STORAGE_KEY)
+    if (v === 'dark' || v === 'light') return v
+  } catch {
+    /* ignore */
+  }
+  return 'light'
+}
+
+/** 介绍中强调用语（与主标题同色：浅 #000 / 深 #fff） */
+const introHlClass = 'font-medium text-[#000000] dark:text-[#ffffff]'
+
+const chipBaseClass =
+  'inline-flex items-center gap-1 rounded-md bg-zinc-100 py-0.5 pl-1.5 pr-2 text-[12px] text-[var(--fg)] dark:bg-zinc-800/80'
+const chipLinkClass =
+  'no-underline transition-colors hover:bg-zinc-200 dark:hover:bg-zinc-700/90'
+
+function SkillTagChips({
+  tags,
+  className
+}: {
+  tags: SkillTag[]
+  className?: string
+}) {
+  return (
+    <div
+      className={['flex flex-wrap gap-[4px]', className]
+        .filter(Boolean)
+        .join(' ')}>
+      {tags.map(
+        ({
+          label,
+          icon,
+          imageSrc,
+          imageClassName,
+          invertInDark,
+          href,
+          iconClassName
+        }) => {
+          const imgCn = imageClassName ?? 'h-3.5 w-3.5 object-contain shrink-0'
+          const iconCn = iconClassName ?? 'h-3.5 w-3.5'
+          const inner = (
+            <>
+              {imageSrc ? (
+                <img src={imageSrc} alt="" className={imgCn} />
+              ) : icon ? (
+                <Icon
+                  icon={icon}
+                  className={`${iconCn} shrink-0${invertInDark ? 'dark:brightness-0 dark:invert' : ''}`}
+                  aria-hidden
+                />
+              ) : null}
+              {label}
+            </>
+          )
+          return href ? (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${chipBaseClass} ${chipLinkClass}`}>
+              {inner}
+            </a>
+          ) : (
+            <span key={label} className={chipBaseClass}>
+              {inner}
+            </span>
+          )
+        }
+      )}
+    </div>
+  )
+}
+
+export default function Blog() {
+  const [theme, setTheme] = useState<Theme>(() => readStoredTheme())
+  const workYears = workYearsSinceJoin(CAREER_JOIN_YEAR)
+  // const age = ageFromIsoDate(BIRTH_DATE)
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('dark', theme === 'dark')
+    try {
+      localStorage.setItem(STORAGE_KEY, theme)
+    } catch {
+      /* ignore */
+    }
+  }, [theme])
+
+  return (
+    <div className="min-h-screen">
+      <button
+        type="button"
+        onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+        className="fixed top-0 right-0 z-50 p-8 text-[var(--fg)] opacity-60 transition-opacity hover:opacity-100"
+        aria-label={theme === 'light' ? '切换为深色模式' : '切换为浅色模式'}>
+        <Icon
+          icon={theme === 'light' ? 'lucide:moon' : 'lucide:sun'}
+          className="w-5 h-5"
+          aria-hidden
+        />
+      </button>
+
+      <main className="px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
+        <div className="flex flex-col items-start w-full">
+          <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
+            {REAL_NAME}
+          </h1>
+          <p className="mt-4 max-w-prose text-[15px] text-[var(--fg)]">
+            {/* 备用：在「工程师」后接「现年 age 岁，」（需恢复上方 BIRTH_DATE / ageFromIsoDate / age） */}
+            嗨！我是{REAL_NAME}，一名
+            <span className={introHlClass}>前端开发工程师</span>
+            ，
+            <span className={introHlClass}>{workYears} 年</span>
+            工作经验。
+          </p>
+          <div className="flex flex-row flex-wrap gap-y-1 gap-x-5 items-center mt-4">
+            <a
+              href={GITHUB_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-normal text-[var(--fg)] no-underline opacity-80 transition-opacity hover:opacity-100">
+              <Icon
+                icon="devicon:github"
+                className="w-4 h-4 shrink-0 dark:brightness-0 dark:invert"
+                aria-hidden
+              />
+              {HANDLE}
+            </a>
+            <a
+              href={NPM_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-normal text-[var(--fg)] no-underline opacity-80 transition-opacity hover:opacity-100">
+              <Icon
+                icon="devicon:npm"
+                className="w-4 h-4 shrink-0"
+                aria-hidden
+              />
+              {NPM_HANDLE}
+            </a>
+            <a
+              href={BILIBILI_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-normal text-[var(--fg)] no-underline opacity-80 transition-opacity hover:opacity-100">
+              <Icon
+                icon="simple-icons:bilibili"
+                className="h-4 w-4 shrink-0 text-[#00AEEC] dark:text-[#23ADE5]"
+                aria-hidden
+              />
+              {BILIBILI_HANDLE}
+            </a>
+          </div>
+
+          <section
+            className="mt-12 flex w-full flex-col gap-[8px]"
+            aria-label="技能">
+            <section
+              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              aria-label="主要技能">
+              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
+                主要技能
+              </h2>
+              <SkillTagChips
+                tags={SKILL_TAGS_PRIMARY}
+                className="flex-1 min-w-0"
+              />
+            </section>
+
+            <section
+              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              aria-label="次要技能">
+              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
+                次要技能
+              </h2>
+              <SkillTagChips
+                tags={SKILL_TAGS_SECONDARY}
+                className="flex-1 min-w-0"
+              />
+            </section>
+
+            <section
+              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              aria-label="常用库">
+              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
+                常用库
+              </h2>
+              <SkillTagChips
+                tags={SKILL_TAGS_LIBRARIES}
+                className="flex-1 min-w-0"
+              />
+            </section>
+
+            <section
+              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              aria-label="常用工具">
+              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
+                常用工具
+              </h2>
+              <SkillTagChips
+                tags={SKILL_TAGS_TOOLS}
+                className="flex-1 min-w-0"
+              />
+            </section>
+
+            <section
+              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              aria-label="无关紧要">
+              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
+                无关紧要
+              </h2>
+              <SkillTagChips
+                tags={SKILL_TAGS_MISC}
+                className="flex-1 min-w-0"
+              />
+            </section>
+          </section>
+        </div>
+      </main>
+    </div>
+  )
+}
