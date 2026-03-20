@@ -21,7 +21,7 @@ const iconLinkClass =
 export default function SiteHeaderNav({ theme, onToggleTheme }: Props) {
   return (
     <nav
-      className="flex fixed top-0 right-0 z-50 gap-4 items-center p-8 sm:gap-5"
+      className="fixed inset-x-0 top-0 z-50 flex w-full items-center justify-end gap-4 border-b border-zinc-200/70 bg-zinc-50/75 px-6 py-3 backdrop-blur-[8px] sm:gap-5 sm:px-8 sm:py-4 dark:border-zinc-800/80 dark:bg-zinc-950/70"
       aria-label="站点导航">
       <NavLink
         to="/"
