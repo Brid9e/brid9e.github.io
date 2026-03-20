@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import DevLogAiStar from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
 import {
@@ -69,8 +70,9 @@ export default function LogListPage() {
                       <Link
                         to={`/log/${encodeURIComponent(slugFromFileName(e.fileName))}`}
                         className="flex flex-row items-baseline justify-between gap-4 rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
-                        <h3 className="m-0 min-w-0 flex-1 text-[20px] font-medium leading-tight text-[var(--fg)]">
-                          {e.title}
+                        <h3 className="m-0 flex min-w-0 flex-1 items-baseline gap-0.5 text-[20px] font-medium leading-tight text-[var(--fg)]">
+                          <span className="min-w-0">{e.title}</span>
+                          {e.aiRelated ? <DevLogAiStar /> : null}
                         </h3>
                         <time
                           className="text-xs tabular-nums opacity-60 shrink-0"

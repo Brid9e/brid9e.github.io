@@ -1,4 +1,4 @@
-/** 开发日志：递归收集 docs 下全部 .md（排除 README）；日期可在文件名 YYYY-MM-DD- 前缀或 frontmatter date；可选 YAML title；正文 # 标题或由 frontmatter 覆盖 */
+/** 开发日志：递归收集 docs 下全部 .md（排除 README）；日期可在文件名 YYYY-MM-DD- 前缀或 frontmatter date；可选 YAML title；`ai: true` 等与 AI 相关标识；正文 # 标题或由 frontmatter 覆盖 */
 const rawModules = import.meta.glob('../../docs/**/*.md', {
   eager: true,
   query: '?raw',
@@ -24,6 +24,8 @@ export type DevLogEntry = {
   raw: string
   /** 去掉首行 `# 标题` 后的正文，详情页渲染（避免与页头标题重复） */
   bodyMarkdown: string
+  /** frontmatter `ai: true` 等与 AI 相关的文档，列表/详情标题旁显示 ✦ */
+  aiRelated: boolean
 }
 
 const DATE_PREFIX = /^(\d{4}-\d{2}-\d{2})(?:-(.+))?\.md$/
@@ -236,6 +238,17 @@ function fallbackYmdFromMetaDate(meta: Record<string, string>): string {
   return m ? m[1] : '2000-01-01'
 }
 
+/** frontmatter 布尔：`ai: true` / `yes` / `1` / `on`（不区分大小写） */
+function metaTruthy(meta: Record<string, string>, key: string): boolean {
+  const v = meta[key]?.trim().toLowerCase()
+  if (!v) return false
+  return v === 'true' || v === 'yes' || v === '1' || v === 'on'
+}
+
+function aiRelatedFromMeta(meta: Record<string, string>): boolean {
+  return metaTruthy(meta, 'ai') || metaTruthy(meta, 'ai_related')
+}
+
 function parseFile(filePath: string, raw: string): DevLogEntry | null {
   const relPath = relativePathFromDocsKey(filePath)
   const baseName = fileNameFromPath(relPath)
@@ -246,6 +259,7 @@ function parseFile(filePath: string, raw: string): DevLogEntry | null {
   const { title: mdTitle, body } = parseMarkdown(content)
   const title =
     (meta.title?.trim() || mdTitle.trim() || 'Untitled').trim() || 'Untitled'
+  const aiRelated = aiRelatedFromMeta(meta)
 
   if (dm) {
     const filenameDate = dm[1]
@@ -253,6 +267,7 @@ function parseFile(filePath: string, raw: string): DevLogEntry | null {
     return {
       ...pub,
       title,
+      aiRelated,
       excerpt: excerptFromBody(body),
       fileName: relPath,
       raw,
@@ -265,6 +280,7 @@ function parseFile(filePath: string, raw: string): DevLogEntry | null {
   return {
     ...pub,
     title,
+    aiRelated,
     excerpt: excerptFromBody(body),
     fileName: relPath,
     raw,

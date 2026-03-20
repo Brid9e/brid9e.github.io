@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import DevLogAiStar from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
 import nikonSvg from '@/assets/imgs/nikon.svg'
@@ -341,8 +342,9 @@ export default function Blog() {
                       to={`/log/${encodeURIComponent(slugFromFileName(e.fileName))}`}
                       className="block min-w-0 w-full rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
                       <div className="flex flex-row flex-nowrap gap-x-3 items-baseline w-full min-w-0">
-                        <h3 className="m-0 min-w-0 flex-1 truncate text-[22px] font-medium leading-tight text-[var(--fg)]">
-                          {e.title}
+                        <h3 className="m-0 flex min-w-0 flex-1 items-baseline gap-0.5 text-[22px] font-medium leading-tight text-[var(--fg)]">
+                          <span className="min-w-0 truncate">{e.title}</span>
+                          {e.aiRelated ? <DevLogAiStar /> : null}
                         </h3>
                         <time
                           className="text-xs tabular-nums opacity-60 shrink-0"

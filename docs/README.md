@@ -9,12 +9,15 @@
 
 与 VitePress 类似，在文件**最开头**加 YAML 块，用 `date` 指定发布日或时间：
 
+- **AI 相关文档**（列表与详情页标题旁显示紫色 ✦ 角标）：在 frontmatter 中加 `ai: true`（或 `ai_related: true`）。
+
 - **只写日期**：
 
 ```yaml
 ---
 date: 2026-03-18
 title: 可选覆盖标题
+ai: true
 ---
 ```
 

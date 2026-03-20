@@ -5,6 +5,7 @@ import rehypeShiki from '@shikijs/rehype'
 import remarkGfm from 'remark-gfm'
 import type { Options } from 'react-markdown'
 
+import { aiGradientTextClass } from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
 import { getDevLogBySlug } from '@/lib/devlogDocs'
@@ -115,11 +116,20 @@ export default function DevLogPage() {
           <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
             {entry.title}
           </h1>
-          <time
-            className="mt-2 block text-sm tabular-nums text-[var(--fg)] opacity-70"
-            dateTime={entry.dateTimeAttribute}>
-            {entry.dateDisplayDetail}
-          </time>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 text-sm tabular-nums">
+            <time
+              className="text-[var(--fg)] opacity-70"
+              dateTime={entry.dateTimeAttribute}>
+              {entry.dateDisplayDetail}
+            </time>
+            {entry.aiRelated ? (
+              <span
+                className={`font-semibold tracking-tight ${aiGradientTextClass}`}
+                aria-label="AI 相关">
+                AI ✦
+              </span>
+            ) : null}
+          </div>
         </header>
         <article className={mdArticleClass}>
           <MarkdownHooks
