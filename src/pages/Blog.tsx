@@ -1,9 +1,21 @@
 import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import ParticleBackground from '@/components/ParticleBackground'
+import SiteHeaderNav from '@/components/SiteHeaderNav'
 import nikonSvg from '@/assets/imgs/nikon.svg'
 import qiankunImg from '@/assets/imgs/qiankun.png'
+import {
+  BILIBILI_HANDLE,
+  BILIBILI_URL,
+  GITHUB_PROFILE_URL,
+  HANDLE,
+  NPM_HANDLE,
+  NPM_PROFILE_URL,
+  STEAM_PROFILE_URL
+} from '@/constants/social'
+import { latestDevLogs, slugFromFileName } from '@/lib/devlogDocs'
 
 const STORAGE_KEY = 'theme'
 
@@ -21,13 +33,6 @@ type SkillTag = {
 }
 
 const REAL_NAME = '王栋桥'
-const HANDLE = '@Brid9e'
-const GITHUB_PROFILE_URL = 'https://github.com/Brid9e'
-const NPM_PROFILE_URL = 'https://www.npmjs.com/~joebrid9ewong'
-const NPM_HANDLE = '@joebrid9ewong'
-const BILIBILI_URL = 'https://space.bilibili.com/8086424'
-const BILIBILI_HANDLE = '@布瑞之'
-const STEAM_PROFILE_URL = 'https://steamcommunity.com/id/JoeWong12138'
 
 /** 入职年份（用于工龄展示，按自然年差计算） */
 const CAREER_JOIN_YEAR = 2021
@@ -98,7 +103,7 @@ const SKILL_TAGS_MISC: SkillTag[] = [
   },
   { label: '唱歌', icon: 'solar:music-note-bold' },
   { label: '旅游', icon: 'emojione-monotone:mountain' },
-  { label: '健身（任重道远）', icon: 'icon-park-outline:fitness' },
+  { label: '健身（才起步，任重道远）', icon: 'icon-park-outline:fitness' },
   { label: 'CS2', icon: 'simple-icons:counterstrike' }
 ]
 
@@ -203,17 +208,10 @@ export default function Blog() {
   return (
     <div className="relative min-h-screen">
       <ParticleBackground />
-      <button
-        type="button"
-        onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
-        className="fixed top-0 right-0 z-50 p-8 text-[var(--fg)] opacity-60 transition-opacity hover:opacity-100"
-        aria-label={theme === 'light' ? '切换为深色模式' : '切换为浅色模式'}>
-        <Icon
-          icon={theme === 'light' ? 'lucide:moon' : 'lucide:sun'}
-          className="w-5 h-5"
-          aria-hidden
-        />
-      </button>
+      <SiteHeaderNav
+        theme={theme}
+        onToggleTheme={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+      />
 
       <main className="relative z-10 px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
         <div className="flex flex-col items-start w-full">
@@ -332,6 +330,31 @@ export default function Blog() {
               />
             </section>
           </section>
+
+          {latestDevLogs.length > 0 ? (
+            <section className="mt-12 w-full" aria-label="最近更新">
+              <ul className="flex flex-col gap-4 p-0 m-0 list-none">
+                {latestDevLogs.map((e) => (
+                  <li key={e.fileName}>
+                    <Link
+                      to={`/log/${encodeURIComponent(slugFromFileName(e.fileName))}`}
+                      className="block rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
+                      <div className="flex flex-wrap gap-y-1 gap-x-3 items-baseline">
+                        <h3 className="m-0 text-[22px] font-medium leading-tight text-[var(--fg)]">
+                          {e.title}
+                        </h3>
+                        <time
+                          className="text-xs tabular-nums opacity-60 shrink-0"
+                          dateTime={e.dateTimeAttribute}>
+                          {e.dateDisplayShort}
+                        </time>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </div>
       </main>
     </div>

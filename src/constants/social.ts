@@ -1,0 +1,7 @@
+export const GITHUB_PROFILE_URL = 'https://github.com/Brid9e'
+export const NPM_PROFILE_URL = 'https://www.npmjs.com/~joebrid9ewong'
+export const NPM_HANDLE = '@joebrid9ewong'
+export const BILIBILI_URL = 'https://space.bilibili.com/8086424'
+export const BILIBILI_HANDLE = '@布瑞之'
+export const STEAM_PROFILE_URL = 'https://steamcommunity.com/id/JoeWong12138'
+export const HANDLE = '@Brid9e'
