@@ -215,6 +215,7 @@ export default function Blog() {
 
       <main className="relative z-10 px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
         <div className="flex flex-col items-start w-full">
+          {/* Brid9e 粒子 Logo：恢复时 import LogoBrid9eParticles 并接在标题后 */}
           <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
             {REAL_NAME}
           </h1>
@@ -339,7 +340,7 @@ export default function Blog() {
                     <Link
                       to={`/log/${encodeURIComponent(slugFromFileName(e.fileName))}`}
                       className="block min-w-0 w-full rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
-                      <div className="flex flex-row flex-nowrap gap-x-3 items-baseline min-w-0 w-full">
+                      <div className="flex flex-row flex-nowrap gap-x-3 items-baseline w-full min-w-0">
                         <h3 className="m-0 min-w-0 flex-1 truncate text-[22px] font-medium leading-tight text-[var(--fg)]">
                           {e.title}
                         </h3>
