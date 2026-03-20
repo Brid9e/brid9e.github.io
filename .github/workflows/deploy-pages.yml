@@ -1,4 +1,8 @@
-# 构建 dist 并发布到本仓库的 GitHub Pages（需在仓库 Settings → Pages 将 Source 设为 GitHub Actions）
+# 构建 dist 并发布到本仓库的 GitHub Pages
+#
+# 若 deploy 报 404 Failed to create deployment：到仓库 Settings → Pages，
+# 在 Build and deployment 里把 Source 选「GitHub Actions」并保存（未启用 Pages 时 API 会 404）
+# https://github.com/Brid9e/brid9e.github.io/settings/pages
 name: Deploy to GitHub Pages
 
 on:
@@ -27,7 +31,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
