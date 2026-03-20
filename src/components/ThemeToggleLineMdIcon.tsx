@@ -20,10 +20,6 @@ function freezeSvgTime(svg: SVGSVGElement, theme: Theme) {
   svg.setCurrentTime(timeForTheme(theme))
 }
 
-function easeInOutCubic(t: number): number {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-}
-
 function animateSvgTime(
   svg: SVGSVGElement,
   from: number,
@@ -37,8 +33,7 @@ function animateSvgTime(
     if (shouldCancel()) return
     const elapsed = now - start
     const u = Math.min(1, elapsed / durationMs)
-    const eased = easeInOutCubic(u)
-    const time = from + (to - from) * eased
+    const time = from + (to - from) * u
     try {
       svg.pauseAnimations()
       svg.setCurrentTime(time)
@@ -135,7 +130,7 @@ export default function ThemeToggleLineMdIcon({ theme }: { theme: Theme }) {
     <span
       ref={wrapRef}
       className="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center [&_svg]:block [&_svg]:h-full [&_svg]:w-full">
-      <Icon icon={ICON} className="h-full w-full" aria-hidden />
+      <Icon icon={ICON} className="w-full h-full" aria-hidden />
     </span>
   )
 }
