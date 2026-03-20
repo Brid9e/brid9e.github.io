@@ -3,7 +3,7 @@ import { MarkdownHooks } from 'react-markdown'
 import { Navigate, useParams } from 'react-router-dom'
 import rehypeShiki from '@shikijs/rehype'
 import remarkGfm from 'remark-gfm'
-import type { Options } from 'react-markdown'
+import type { Components, Options } from 'react-markdown'
 
 import { aiGradientTextClass } from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
@@ -38,7 +38,7 @@ const mdArticleClass =
   /* Shiki 负责 pre 背景色；这里只保留版式 */
   '[&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:text-[13px] [&_pre]:leading-relaxed ' +
   '[&_.shiki]:rounded-lg ' +
-  '[&_strong]:font-medium [&_table]:my-4 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-zinc-200 [&_td]:p-2 dark:[&_td]:border-zinc-700 ' +
+  '[&_strong]:font-medium [&_table]:my-0 [&_table]:w-full [&_table]:border-collapse [&_table]:text-[15px] [&_table]:text-[var(--fg)] [&_td]:border [&_td]:border-zinc-200 [&_td]:p-2 dark:[&_td]:border-zinc-700 ' +
   '[&_th]:border [&_th]:border-zinc-200 [&_th]:p-2 dark:[&_th]:border-zinc-700 ' +
   '[&_ul]:my-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:text-[15px] [&_ul]:text-[var(--fg)]'
 
@@ -66,6 +66,17 @@ export default function DevLogPage() {
   const entry = slug ? getDevLogBySlug(slug) : null
 
   const [theme, setTheme] = useState<Theme>(() => readStoredTheme())
+
+  const mdComponents = useMemo<Components>(
+    () => ({
+      table: ({ children, ...props }) => (
+        <div className="my-4 max-w-full overflow-x-auto [-webkit-overflow-scrolling:touch]">
+          <table {...props}>{children}</table>
+        </div>
+      )
+    }),
+    []
+  )
 
   const rehypePlugins = useMemo((): NonNullable<Options['rehypePlugins']> => {
     return [
@@ -111,12 +122,12 @@ export default function DevLogPage() {
         onToggleTheme={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
       />
 
-      <main className="relative z-10 px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
+      <main className="relative z-10 px-6 pt-16 pb-20 mx-auto min-w-0 max-w-2xl sm:pt-20">
         <header className="mb-8">
           <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
             {entry.title}
           </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 text-sm tabular-nums">
+          <div className="flex flex-wrap gap-x-3 items-center mt-2 text-sm tabular-nums">
             <time
               className="text-[var(--fg)] opacity-70"
               dateTime={entry.dateTimeAttribute}>
@@ -131,10 +142,11 @@ export default function DevLogPage() {
             ) : null}
           </div>
         </header>
-        <article className={mdArticleClass}>
+        <article className={`min-w-0 max-w-full ${mdArticleClass}`}>
           <MarkdownHooks
             remarkPlugins={[remarkGfm]}
             rehypePlugins={rehypePlugins}
+            components={mdComponents}
             fallback={
               <p className="text-[15px] text-[var(--fg)] opacity-50">渲染中…</p>
             }>
