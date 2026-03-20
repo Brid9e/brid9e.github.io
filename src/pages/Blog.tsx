@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react'
 
+import ParticleBackground from '@/components/ParticleBackground'
 import nikonSvg from '@/assets/imgs/nikon.svg'
 import qiankunImg from '@/assets/imgs/qiankun.png'
 
@@ -26,6 +27,7 @@ const NPM_PROFILE_URL = 'https://www.npmjs.com/~joebrid9ewong'
 const NPM_HANDLE = '@joebrid9ewong'
 const BILIBILI_URL = 'https://space.bilibili.com/8086424'
 const BILIBILI_HANDLE = '@布瑞之'
+const STEAM_PROFILE_URL = 'https://steamcommunity.com/id/JoeWong12138'
 
 /** 入职年份（用于工龄展示，按自然年差计算） */
 const CAREER_JOIN_YEAR = 2021
@@ -96,7 +98,8 @@ const SKILL_TAGS_MISC: SkillTag[] = [
   },
   { label: '唱歌', icon: 'solar:music-note-bold' },
   { label: '旅游', icon: 'emojione-monotone:mountain' },
-  { label: '健身（任重道远）', icon: 'icon-park-outline:fitness' }
+  { label: '健身（任重道远）', icon: 'icon-park-outline:fitness' },
+  { label: 'CS2', icon: 'simple-icons:counterstrike' }
 ]
 
 type Theme = 'light' | 'dark'
@@ -114,8 +117,13 @@ function readStoredTheme(): Theme {
 /** 介绍中强调用语（与主标题同色：浅 #000 / 深 #fff） */
 const introHlClass = 'font-medium text-[#000000] dark:text-[#ffffff]'
 
+/** 技能行标题：四字等宽列，右侧 tag 起点对齐；略加上边距与 chip 第一行齐平 */
+const skillHeadingClass =
+  'shrink-0 w-[4em] pt-1 text-left text-[15px] font-normal leading-none text-[var(--fg)]'
+
+/** 与 body line-height 一致，避免 leading-none 把标签压扁；与标题对齐靠 skillHeadingClass 的 pt */
 const chipBaseClass =
-  'inline-flex items-center gap-1 rounded-md bg-zinc-100 py-0.5 pl-1.5 pr-2 text-[12px] text-[var(--fg)] dark:bg-zinc-800/80'
+  'inline-flex items-center gap-1 rounded-md bg-zinc-100 py-0.5 pl-1.5 pr-2 text-[12px] leading-[1.7] text-[var(--fg)] dark:bg-zinc-800/80'
 const chipLinkClass =
   'no-underline transition-colors hover:bg-zinc-200 dark:hover:bg-zinc-700/90'
 
@@ -193,7 +201,8 @@ export default function Blog() {
   }, [theme])
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      <ParticleBackground />
       <button
         type="button"
         onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
@@ -206,7 +215,7 @@ export default function Blog() {
         />
       </button>
 
-      <main className="px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
+      <main className="relative z-10 px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
         <div className="flex flex-col items-start w-full">
           <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
             {REAL_NAME}
@@ -214,8 +223,7 @@ export default function Blog() {
           <p className="mt-4 max-w-prose text-[15px] text-[var(--fg)]">
             {/* 备用：在「工程师」后接「现年 age 岁，」（需恢复上方 BIRTH_DATE / ageFromIsoDate / age） */}
             嗨！我是{REAL_NAME}，一名
-            <span className={introHlClass}>前端开发工程师</span>
-            ，
+            <span className={introHlClass}>前端开发工程师</span>，
             <span className={introHlClass}>{workYears} 年</span>
             工作经验。
           </p>
@@ -256,17 +264,28 @@ export default function Blog() {
               />
               {BILIBILI_HANDLE}
             </a>
+            <a
+              href={STEAM_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Steam 个人主页"
+              className="inline-flex items-center gap-1.5 text-sm font-normal text-[var(--fg)] no-underline opacity-80 transition-opacity hover:opacity-100">
+              <Icon
+                icon="simple-icons:steam"
+                className="w-4 h-4 shrink-0"
+                aria-hidden
+              />
+              {HANDLE}
+            </a>
           </div>
 
           <section
             className="mt-12 flex w-full flex-col gap-[8px]"
             aria-label="技能">
             <section
-              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              className="flex flex-row flex-wrap gap-x-4 items-start w-full"
               aria-label="主要技能">
-              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
-                主要技能
-              </h2>
+              <h2 className={skillHeadingClass}>主要技能</h2>
               <SkillTagChips
                 tags={SKILL_TAGS_PRIMARY}
                 className="flex-1 min-w-0"
@@ -274,11 +293,9 @@ export default function Blog() {
             </section>
 
             <section
-              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              className="flex flex-row flex-wrap gap-x-4 items-start w-full"
               aria-label="次要技能">
-              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
-                次要技能
-              </h2>
+              <h2 className={skillHeadingClass}>次要技能</h2>
               <SkillTagChips
                 tags={SKILL_TAGS_SECONDARY}
                 className="flex-1 min-w-0"
@@ -286,11 +303,9 @@ export default function Blog() {
             </section>
 
             <section
-              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              className="flex flex-row flex-wrap gap-x-4 items-start w-full"
               aria-label="常用库">
-              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
-                常用库
-              </h2>
+              <h2 className={skillHeadingClass}>常用库</h2>
               <SkillTagChips
                 tags={SKILL_TAGS_LIBRARIES}
                 className="flex-1 min-w-0"
@@ -298,11 +313,9 @@ export default function Blog() {
             </section>
 
             <section
-              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
+              className="flex flex-row flex-wrap gap-x-4 items-start w-full"
               aria-label="常用工具">
-              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
-                常用工具
-              </h2>
+              <h2 className={skillHeadingClass}>常用工具</h2>
               <SkillTagChips
                 tags={SKILL_TAGS_TOOLS}
                 className="flex-1 min-w-0"
@@ -310,11 +323,9 @@ export default function Blog() {
             </section>
 
             <section
-              className="flex flex-row flex-wrap gap-x-4 items-center w-full"
-              aria-label="无关紧要">
-              <h2 className="shrink-0 text-[15px] font-normal leading-none text-[var(--fg)]">
-                无关紧要
-              </h2>
+              className="flex flex-row flex-wrap gap-x-4 items-start w-full"
+              aria-label="爱好">
+              <h2 className={skillHeadingClass}>爱好</h2>
               <SkillTagChips
                 tags={SKILL_TAGS_MISC}
                 className="flex-1 min-w-0"
