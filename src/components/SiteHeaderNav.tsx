@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { NavLink } from 'react-router-dom'
 
+import ThemeToggleLineMdIcon from '@/components/ThemeToggleLineMdIcon'
 import {
   BILIBILI_URL,
   GITHUB_PROFILE_URL,
@@ -85,13 +86,9 @@ export default function SiteHeaderNav({ theme, onToggleTheme }: Props) {
       <button
         type="button"
         onClick={onToggleTheme}
-        className="shrink-0 text-[var(--fg)] opacity-60 transition-opacity hover:opacity-100"
+        className="inline-flex shrink-0 items-center justify-center border-0 bg-transparent p-0 text-[var(--fg)] opacity-60 transition-opacity hover:opacity-100 cursor-pointer"
         aria-label={theme === 'light' ? '切换为深色模式' : '切换为浅色模式'}>
-        <Icon
-          icon={theme === 'light' ? 'lucide:moon' : 'lucide:sun'}
-          className="w-5 h-5"
-          aria-hidden
-        />
+        <ThemeToggleLineMdIcon theme={theme} />
       </button>
     </nav>
   )
