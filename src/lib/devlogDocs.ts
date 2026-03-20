@@ -12,9 +12,9 @@ export type DevLogEntry = {
   publishedAtMs: number
   /** 供 `<time datetime="">`（纯日期或完整 ISO） */
   dateTimeAttribute: string
-  /** 列表 / 首页最近：如 `03-18` 或 `03-18 14:30` */
+  /** 列表 / 首页最近：如 `3/18` 或 `3/18 14:30`（M/DD） */
   dateDisplayShort: string
-  /** 详情页时间行：如 `2026-03-18` 或 `2026-03-18 14:30:00` */
+  /** 详情页时间行：如 `3/18/2026` 或 `3/18/2026 14:30:00` */
   dateDisplayDetail: string
   title: string
   excerpt: string
@@ -136,22 +136,24 @@ function inputHasTimeComponent(s: string): boolean {
   return true
 }
 
+/** 展示用 M/DD（月不补零、日两位）；含时间时 `M/DD HH:mm` */
 function formatShort(d: Date, includeTime: boolean): string {
-  const m = pad2(d.getMonth() + 1)
+  const month = d.getMonth() + 1
   const day = pad2(d.getDate())
-  if (!includeTime) return `${m}-${day}`
-  return `${m}-${day} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+  if (!includeTime) return `${month}/${day}`
+  return `${month}/${day} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }
 
+/** 展示用 M/DD/YYYY；含时间时末尾接 `HH:mm:ss` */
 function formatDetail(d: Date, includeTime: boolean): string {
-  const y = d.getFullYear()
-  const mo = pad2(d.getMonth() + 1)
+  const month = d.getMonth() + 1
   const day = pad2(d.getDate())
-  if (!includeTime) return `${y}-${mo}-${day}`
+  const y = d.getFullYear()
+  if (!includeTime) return `${month}/${day}/${y}`
   const h = pad2(d.getHours())
   const min = pad2(d.getMinutes())
   const sec = pad2(d.getSeconds())
-  return `${y}-${mo}-${day} ${h}:${min}:${sec}`
+  return `${month}/${day}/${y} ${h}:${min}:${sec}`
 }
 
 function resolvePublished(

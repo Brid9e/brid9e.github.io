@@ -335,12 +335,12 @@ export default function Blog() {
             <section className="mt-12 w-full" aria-label="最近更新">
               <ul className="flex flex-col gap-4 p-0 m-0 list-none">
                 {latestDevLogs.map((e) => (
-                  <li key={e.fileName}>
+                  <li key={e.fileName} className="min-w-0">
                     <Link
                       to={`/log/${encodeURIComponent(slugFromFileName(e.fileName))}`}
-                      className="block rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
-                      <div className="flex flex-wrap gap-y-1 gap-x-3 items-baseline">
-                        <h3 className="m-0 text-[22px] font-medium leading-tight text-[var(--fg)]">
+                      className="block min-w-0 w-full rounded-sm text-[var(--fg)] no-underline transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]">
+                      <div className="flex flex-row flex-nowrap gap-x-3 items-baseline min-w-0 w-full">
+                        <h3 className="m-0 min-w-0 flex-1 truncate text-[22px] font-medium leading-tight text-[var(--fg)]">
                           {e.title}
                         </h3>
                         <time
