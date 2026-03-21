@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
 /** 相邻矩阵点在屏幕上的间距（CSS 像素），缩放窗口时保持不变 */
-const GAP_PX = 24
+const GAP_PX = 20
 /** 点的视觉直径（像素）近似，随 worldPerPx 换算 */
 const DOT_SIZE_PX = 4
 /** 浅色模式下略大，更易辨认 */

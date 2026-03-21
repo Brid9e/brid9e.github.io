@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DevLogAiStar from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
+import SaturnParticles from '@/components/SaturnParticles'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
 import amapImg from '@/assets/imgs/amap.png'
 import nikonSvg from '@/assets/imgs/nikon.svg'
@@ -206,6 +207,7 @@ export default function Blog() {
       <main className="relative z-10 px-6 pt-16 pb-20 mx-auto max-w-2xl sm:pt-20">
         <div className="flex flex-col items-start w-full">
           {/* Brid9e 粒子 Logo：恢复时 import LogoBrid9eParticles 并接在标题后 */}
+          <SaturnParticles />
           <h1 className="mt-0 text-[36px] font-semibold leading-tight tracking-tight text-[#000000] dark:text-[#ffffff]">
             {REAL_NAME}
           </h1>
