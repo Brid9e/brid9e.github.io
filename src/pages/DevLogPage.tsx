@@ -9,20 +9,12 @@ import { aiGradientTextClass } from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
 import { getDevLogBySlug } from '@/lib/devlogDocs'
-
-const STORAGE_KEY = 'theme'
-
-type Theme = 'light' | 'dark'
-
-function readStoredTheme(): Theme {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY)
-    if (v === 'dark' || v === 'light') return v
-  } catch {
-    /* ignore */
-  }
-  return 'light'
-}
+import {
+  applyThemeClass,
+  persistTheme,
+  readStoredTheme,
+  type Theme
+} from '@/lib/themeStorage'
 
 const mdArticleClass =
   '[&>:first-child]:mt-0 [&_a]:underline [&_a]:underline-offset-2 [&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-zinc-300 [&_blockquote]:pl-4 [&_blockquote]:text-[var(--fg)] dark:[&_blockquote]:border-zinc-600 ' +
@@ -101,13 +93,8 @@ export default function DevLogPage() {
   }, [theme])
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', theme === 'dark')
-    try {
-      localStorage.setItem(STORAGE_KEY, theme)
-    } catch {
-      /* ignore */
-    }
+    applyThemeClass(theme)
+    persistTheme(theme)
   }, [theme])
 
   if (!slug || !entry) {

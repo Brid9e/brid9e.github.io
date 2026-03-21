@@ -9,33 +9,20 @@ import {
   groupDevLogsByYear,
   slugFromFileName
 } from '@/lib/devlogDocs'
-
-const STORAGE_KEY = 'theme'
-
-type Theme = 'light' | 'dark'
-
-function readStoredTheme(): Theme {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY)
-    if (v === 'dark' || v === 'light') return v
-  } catch {
-    /* ignore */
-  }
-  return 'light'
-}
+import {
+  applyThemeClass,
+  persistTheme,
+  readStoredTheme,
+  type Theme
+} from '@/lib/themeStorage'
 
 export default function LogListPage() {
   const [theme, setTheme] = useState<Theme>(() => readStoredTheme())
   const byYear = useMemo(() => groupDevLogsByYear(allDevLogs), [])
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', theme === 'dark')
-    try {
-      localStorage.setItem(STORAGE_KEY, theme)
-    } catch {
-      /* ignore */
-    }
+    applyThemeClass(theme)
+    persistTheme(theme)
   }, [theme])
 
   return (

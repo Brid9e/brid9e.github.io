@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import DevLogAiStar from '@/components/DevLogAiStar'
 import ParticleBackground from '@/components/ParticleBackground'
 import SiteHeaderNav from '@/components/SiteHeaderNav'
+import amapImg from '@/assets/imgs/amap.png'
 import nikonSvg from '@/assets/imgs/nikon.svg'
 import qiankunImg from '@/assets/imgs/qiankun.png'
 import {
@@ -17,8 +18,12 @@ import {
   STEAM_PROFILE_URL
 } from '@/constants/social'
 import { latestDevLogs, slugFromFileName } from '@/lib/devlogDocs'
-
-const STORAGE_KEY = 'theme'
+import {
+  applyThemeClass,
+  persistTheme,
+  readStoredTheme,
+  type Theme
+} from '@/lib/themeStorage'
 
 type SkillTag = {
   label: string
@@ -66,7 +71,8 @@ const SKILL_TAGS_PRIMARY: SkillTag[] = [
   { label: 'Vue', icon: 'devicon:vuejs' },
   { label: 'Vite', icon: 'devicon:vitejs' },
   { label: 'TypeScript', icon: 'devicon:typescript' },
-  { label: 'JavaScript', icon: 'devicon:javascript' }
+  { label: 'JavaScript', icon: 'devicon:javascript' },
+  { label: '微信小程序', icon: 'mingcute:wechat-miniprogram-line' }
 ]
 
 /** 常用库（可视化、UI、微前端等） */
@@ -75,7 +81,7 @@ const SKILL_TAGS_LIBRARIES: SkillTag[] = [
   { label: 'Three.js', icon: 'devicon:threejs', invertInDark: true },
   { label: 'AntV', icon: 'simple-icons:antv' },
   { label: 'Element Plus', icon: 'ep:element-plus' },
-  { label: '高德地图', icon: 'mdi:map' },
+  { label: '高德地图', imageSrc: amapImg },
   { label: 'qiankun', imageSrc: qiankunImg }
 ]
 
@@ -107,18 +113,6 @@ const SKILL_TAGS_MISC: SkillTag[] = [
   { label: '健身（才起步，任重道远）', icon: 'icon-park-outline:fitness' },
   { label: 'CS2', icon: 'simple-icons:counterstrike' }
 ]
-
-type Theme = 'light' | 'dark'
-
-function readStoredTheme(): Theme {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY)
-    if (v === 'dark' || v === 'light') return v
-  } catch {
-    /* ignore */
-  }
-  return 'light'
-}
 
 /** 介绍中强调用语（与主标题同色：浅 #000 / 深 #fff） */
 const introHlClass = 'font-medium text-[#000000] dark:text-[#ffffff]'
@@ -197,13 +191,8 @@ export default function Blog() {
   // const age = ageFromIsoDate(BIRTH_DATE)
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', theme === 'dark')
-    try {
-      localStorage.setItem(STORAGE_KEY, theme)
-    } catch {
-      /* ignore */
-    }
+    applyThemeClass(theme)
+    persistTheme(theme)
   }, [theme])
 
   return (
