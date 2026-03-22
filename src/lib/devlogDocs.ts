@@ -12,7 +12,7 @@ export type DevLogEntry = {
   publishedAtMs: number
   /** 供 `<time datetime="">`（纯日期或完整 ISO） */
   dateTimeAttribute: string
-  /** 列表 / 首页最近：如 `3/18` 或 `3/18 14:30`（M/DD） */
+  /** 列表 / 首页最近：如 `3/18/2026` 或 `3/18/2026 14:30` */
   dateDisplayShort: string
   /** 详情页时间行：如 `3/18/2026` 或 `3/18/2026 14:30:00` */
   dateDisplayDetail: string
@@ -138,12 +138,13 @@ function inputHasTimeComponent(s: string): boolean {
   return true
 }
 
-/** 展示用 M/DD（月不补零、日两位）；含时间时 `M/DD HH:mm` */
+/** 展示用 M/DD/YYYY；含时间时 `M/DD/YYYY HH:mm` */
 function formatShort(d: Date, includeTime: boolean): string {
   const month = d.getMonth() + 1
   const day = pad2(d.getDate())
-  if (!includeTime) return `${month}/${day}`
-  return `${month}/${day} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+  const y = d.getFullYear()
+  if (!includeTime) return `${month}/${day}/${y}`
+  return `${month}/${day}/${y} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }
 
 /** 展示用 M/DD/YYYY；含时间时末尾接 `HH:mm:ss` */

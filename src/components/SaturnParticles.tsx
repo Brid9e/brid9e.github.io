@@ -13,11 +13,14 @@ const REPEL = 26
 const REPEL_DIST = 0.55
 const SPRING = 15
 const DAMPING = 0.935
-/** 深度：与摄像机距离映射到亮度 [DEPTH_BRIGHT, DEPTH_DIM]；暗色主题近亮远暗（雾感），亮色主题反转为近暗远亮以免「远的更黑」抢前景 */
+/** 深度：暗色主题近亮远暗（雾感）；亮色主题用近黑→远更淡的顶点亮度，在白底上显形 */
 const DEPTH_NEAR = 2.85
 const DEPTH_FAR = 5.6
 const DEPTH_BRIGHT = 1.0
 const DEPTH_DIM = 0.18
+/** 亮色：近处更深、远处略亮（向浅灰过渡），与白底形成层次；勿把近亮远暗反过来否则深度像没了 */
+const LIGHT_LUM_NEAR = 0.1
+const LIGHT_LUM_FAR = 0.52
 /** 球+环绕行星极轴自转（环面法线 / 中轴线，非世界 Y）（弧度/秒） */
 const PLANET_SPIN_SPEED = -0.38
 /** 环上粒子点缀色（少量随机），与深度亮度相乘 */
@@ -198,7 +201,7 @@ export default function SaturnParticles() {
     const syncTheme = () => {
       themeIsDark = document.documentElement.classList.contains('dark')
       material.color.setHex(0xffffff)
-      material.opacity = themeIsDark ? 0.92 : 0.58
+      material.opacity = themeIsDark ? 0.92 : 0.9
     }
     syncTheme()
 
@@ -378,7 +381,7 @@ export default function SaturnParticles() {
         const t = THREE.MathUtils.clamp((d - DEPTH_NEAR) * invRange, 0, 1)
         const b = themeIsDark
           ? THREE.MathUtils.lerp(DEPTH_BRIGHT, DEPTH_DIM, t)
-          : THREE.MathUtils.lerp(DEPTH_DIM, DEPTH_BRIGHT, t)
+          : THREE.MathUtils.lerp(LIGHT_LUM_NEAR, LIGHT_LUM_FAR, t)
         const a = accent[i]
         if (a === 1) {
           col[o] = b * ACCENT_GREEN.r
